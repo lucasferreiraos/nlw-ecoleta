@@ -30,13 +30,45 @@ function getCities(event) {
     .then(response => response.json())
     .then(cities => {
         for (city of cities) {
-            citySelect.innerHTML += `<option value="${city.id}">${city.nome}</option>`;
+            citySelect.innerHTML += `<option value="${city.nome}">${city.nome}</option>`;
         }
 
         citySelect.disabled = false;
     })
-}
+};
 
 document
 .querySelector("select[name=uf]")
 .addEventListener("change", getCities);
+
+const itemsToCollect = document.querySelectorAll(".items-grid li");
+
+for (item of itemsToCollect) {
+    item.addEventListener("click", handleSelectedItem);
+}
+
+let selectedItems = [];
+const collectedItems = document.querySelector("input[name=items");
+
+function handleSelectedItem(event) {
+    const itemLi = event.target;
+
+    itemLi.classList.toggle("selected");
+
+    const itemId = itemLi.dataset.id;
+
+    const alreadySelcted = selectedItems.findIndex(item => {
+        return item == itemId
+    });
+
+    if (alreadySelcted >=0) {
+        const filtederItems = selectedItems.filter(item => {
+            return item != itemId;
+        });
+        selectedItems = filtederItems;
+    } else {
+        selectedItems.push(itemId);
+    }
+    
+    collectedItems.value = selectedItems;
+}
